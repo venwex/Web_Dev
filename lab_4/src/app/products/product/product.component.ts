@@ -1,14 +1,18 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+
 @Component({
   selector: 'app-product',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './product.component.html',
   styleUrl: './product.component.css'
 })
 export class ProductComponent {
+  constructor(private router: Router) {}
+
   categories = ['Клавиатура', 'Телефон', 'Компьютер', 'Приставка'];
   selected = 'Клавиатура';
 
@@ -116,7 +120,6 @@ export class ProductComponent {
   ]
 
   getfilteredProducts(){
-
     var filtered = []
     for(var i = 0; i < this.products.length;i++){
       if(this.products[i].category === this.selected){
@@ -157,5 +160,9 @@ export class ProductComponent {
 
   selectProduct(product: any) {
     this.selectedProduct = product;
+  }
+
+  getRouterLink(productId: number): string {
+    return this.router.serializeUrl(this.router.createUrlTree(['/product-details', productId]));
   }
 }

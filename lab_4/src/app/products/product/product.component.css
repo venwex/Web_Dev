@@ -81,3 +81,10 @@
     color: #0056b3;
   }
   
+  h1 {
+    text-align: center;
+  }
+
+  label {
+    margin-right: 5px;
+  }

@@ -21,7 +21,6 @@ body {
     height: 400px;
     display: flex;
     align-items: center;
-    text-align: left;
     padding: 20px;
 }
 
@@ -50,16 +49,18 @@ body {
     background: white;
     padding: 20px;
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 220px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 .product-card img {
     width: 100%;
     border-radius: 5px;
 }
 .product-card button, .banner-content button {
-    background: #0067b8;
+    background: blue;
     color: white;
     padding: 10px;
     border: none;

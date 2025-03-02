@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
             taskList.removeChild(li);
         });
 
-        li.appendChild(checkbox);
+        li.appendChild(checkbox); 
         li.appendChild(taskSpan);
         li.appendChild(deleteButton);
         taskList.appendChild(li);
