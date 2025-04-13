@@ -1,33 +1,45 @@
 from django.shortcuts import render
-from rest_framework import generics
 from .models import Company, Vacancy
 from .serializers import CompanySerializer, VacancySerializer
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from django.shortcuts import get_object_or_404
+from rest_framework.views import APIView
 # Create your views here.
 
-class CompaniesList(generics.ListAPIView):
-    queryset = Company.objects.all()
-    serializer_class = CompanySerializer
+@api_view(['GET'])
+def companies_list(request):
+    companies = Company.objects.all()
+    serializer = CompanySerializer(companies, many=True)
+    return Response(serializer.data)
 
-class CompanyDetailView(generics.RetrieveAPIView):
-    queryset = Company.objects.all()
-    serializer_class = CompanySerializer
+@api_view(['GET'])
+def company_detail(request, pk):
+    company = get_object_or_404(Company, pk=pk)
+    serializer = CompanySerializer(company)
+    return Response(serializer.data)
 
-class ListVacancyByCompany(generics.ListAPIView):
-    serializer_class = VacancySerializer
+@api_view(['GET'])
+def vacancies_by_company(request, pk):
+    vacancies = Vacancy.objects.filter(Company_id=pk)
+    serializer = VacancySerializer(vacancies, many=True)
+    return Response(serializer.data)
 
-    def get_queryset(self):
-        company_id = self.kwargs['pk']
-        return Vacancy.objects.filter(Company_id=company_id)
+class VacanciesList(APIView):
+    def get(self, request):
+        vacancies = Vacancy.objects.all()
+        serializer = VacancySerializer(vacancies, many=True)
+        return Response(serializer.data)
 
-class VacanciesList(generics.ListAPIView):
-    queryset = Vacancy.objects.all()
-    serializer_class = VacancySerializer
+class VacancyDetailView(APIView):
+    def get(self, request, pk):
+        vacancy = get_object_or_404(Vacancy, pk=pk)
+        serializer = VacancySerializer(vacancy)
+        return Response(serializer.data)
 
-class VacancyDetailView(generics.RetrieveAPIView):
-    queryset = Vacancy.objects.all()
-    serializer_class = VacancySerializer
-
-class VacancyTopTenView(generics.ListAPIView):
-    serializer_class = VacancySerializer
-
-    queryset = Vacancy.objects.order_by('-salary')[:10]  # Изменено на атрибут 'queryset'
+class VacancyTopTenView(APIView):
+    def get(self, request):
+        top_vacancies = Vacancy.objects.order_by('-salary')[:10]
+        serializer = VacancySerializer(top_vacancies, many=True)
+        return Response(serializer.data)
